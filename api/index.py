@@ -1,12 +1,15 @@
-from flask import Response, Flask
-from glucose.glucose_api import glucose_api
+from flask import Flask, render_template
+from api.glucose.glucose_apis import glucose_api
 
 app = Flask(__name__)
 app.register_blueprint(glucose_api)
+app.static_folder = "static"
 
 
 @app.route("/")
 def index():
-    return Response(response="Home Page",
-                    headers={'Access-Control-Allow-Origin': '*'},
-                    mimetype="application/json")
+    return render_template('index.html')
+
+
+if __name__ == "__main__":
+    app.run()
