@@ -11,6 +11,3 @@ def index():
                     headers={'Access-Control-Allow-Origin': '*'},
                     mimetype="application/json")
 
-
-if __name__ == "__main__":
-    app.run()
