@@ -1,6 +1,8 @@
 from flask import Response, Flask
+from api.glucose.glucose_apis import glucose_api
 
 app = Flask(__name__)
+app.register_blueprint(glucose_api)
 
 
 @app.route("/")
