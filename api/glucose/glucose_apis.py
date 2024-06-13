@@ -15,8 +15,7 @@ def get_latest_glucose_reading():
     data, count = database.table('glucose').select('*').order('date', desc=True).limit(1).single().execute()
     data_json = json.dumps(data[1], indent=4)
     return Response(data_json,
-                    headers={'Access-Control-Allow-Origin': '*',
-                             'Cache-Control': 's-maxage=900, stale-while-revalidate=60'},
+                    headers={'Access-Control-Allow-Origin': '*'},
                     mimetype="application/json")
 
 
@@ -25,8 +24,7 @@ def get_all_glucose_reading():
     data, count = database.table('glucose').select('*').order('date', desc=True).limit(10).execute()
     data_json = json.dumps(data[1], indent=4)
     return Response(data_json,
-                    headers={'Access-Control-Allow-Origin': '*',
-                             'Cache-Control': 's-maxage=900, stale-while-revalidate=60'},
+                    headers={'Access-Control-Allow-Origin': '*'},
                     mimetype="application/json")
 
 
