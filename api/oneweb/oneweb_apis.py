@@ -1,57 +1,66 @@
-import requests
-from api.oneweb.oneweb_payloads import Payload
-from api.oneweb.oneweb_constants import (PROJECT_COLLECTION, EXPERIENCE_COLLECTION,
-                                     GRAPHQL_DATA, GRAPHQL_ITEMS, APPLICATION_JSON,
-                                     BEARER, GRAPHQL_QUERY, GRAPHQL_VARIABLES, HOME_PAGE)
-from flask import Blueprint
+import json
+import os
+from datetime import datetime
+
+from api.oneweb.contentful_request import ContentfulRequest
+from api.oneweb.oneweb_cache import Cache
+from api.oneweb.oneweb_constants import (APPLICATION_JSON,
+                                         ENVIRONMENT, SPACE_ID, APP_TOKEN, CACHE_DURATION, INVALIDATION_TOKEN,
+                                         ACCESS_CONTROL_ALLOW_ORIGIN, QUERY_TOKEN)
+from flask import Blueprint, Response, request
 
 
 oneweb_api = Blueprint("oneweb_api", __name__, template_folder="oneweb")
+environment = os.environ[ENVIRONMENT]
+space_id = os.environ[SPACE_ID]
+token = os.environ[APP_TOKEN]
+cache_duration = os.environ[CACHE_DURATION]
+cache = Cache(cache_duration)
+invalidation_token = os.environ[INVALIDATION_TOKEN]
+contentful = ContentfulRequest(space_id, environment, token)
 
 
-class ContentfulRequest:
+@oneweb_api.route('/v1/oneweb/projects')
+def projects():
+    projects_result = ""
+    if cache.is_cache_expired() or not cache.projects:
+        response = contentful.get_projects()
+        projects_result = response
+        cache.cache_time = datetime.now()
+        cache.projects = response
+    else:
+        projects_result = cache.projects
+    return Response(json.dumps(projects_result, indent=4),
+                    headers=ACCESS_CONTROL_ALLOW_ORIGIN,
+                    mimetype=APPLICATION_JSON)
 
-    def __init__(self, space_id, environment, token):
-        self.space_id = space_id
-        self.environment = environment
-        self.token = token
-        self.base_url = f"https://graphql.contentful.com/content/v1/spaces/{self.space_id}/environments/{self.environment}"
-        self.payloads = Payload()
 
-    def get_homepage(self):
-        headers = self.get_headers()
-        response = requests.post(self.base_url,
-                                 json={GRAPHQL_QUERY: self.payloads.HOME_PAGE_PAYLOAD, GRAPHQL_VARIABLES: {}},
-                                 headers=headers)
-        return ContentfulRequest.get_response_single_content(response=response,
-                                                             field_name=HOME_PAGE)
+@oneweb_api.route('/v1/oneweb/homePage')
+def get_home_page():
+    home_page_result = ""
+    if cache.is_cache_expired() or not cache.home_page:
+        response = contentful.get_homepage()
+        home_page_result = response
+        cache.cache_time = datetime.now()
+        cache.home_page = response
+    else:
+        home_page_result = cache.home_page
+    return Response(json.dumps(home_page_result, indent=4),
+                    headers=ACCESS_CONTROL_ALLOW_ORIGIN,
+                    mimetype=APPLICATION_JSON)
 
-    def get_projects(self):
-        headers = self.get_headers()
-        response = requests.post(self.base_url,
-                                 json={GRAPHQL_QUERY: self.payloads.PROJECTS_PAYLOAD, GRAPHQL_VARIABLES: {}},
-                                 headers=headers)
-        return ContentfulRequest.get_response_content(response=response,
-                                                      field_name=PROJECT_COLLECTION)
 
-    def get_experiences(self):
-        headers = self.get_headers()
-        response = requests.post(self.base_url,
-                                 json={GRAPHQL_QUERY: self.payloads.EXPERIENCES_PAYLOAD, GRAPHQL_VARIABLES: {}},
-                                 headers=headers)
-        return ContentfulRequest.get_response_content(response=response,
-                                                      field_name=EXPERIENCE_COLLECTION)
+@oneweb_api.route("/v1/oneweb/invalidate")
+def invalidate():
+    message = ""
+    user_invalidation_token = request.args.get(QUERY_TOKEN)
+    if user_invalidation_token == invalidation_token:
+        cache.projects = []
+        cache.experiences = []
+        message = "Content is successfully invalidated"
+    else:
+        message = "Missing token header, content isn't invalidated"
+    return Response(message,
+                    headers=ACCESS_CONTROL_ALLOW_ORIGIN,
+                    mimetype=APPLICATION_JSON)
 
-    def get_headers(self):
-        return {
-            'Content-Type': APPLICATION_JSON,
-            'Authorization': f"{BEARER} {self.token}"
-        }
-
-    @staticmethod
-    def get_response_content(response, field_name):
-        return response.json()[GRAPHQL_DATA][field_name][GRAPHQL_ITEMS]
-
-    @staticmethod
-    def get_response_single_content(response, field_name):
-        return response.json()[GRAPHQL_DATA][field_name]
