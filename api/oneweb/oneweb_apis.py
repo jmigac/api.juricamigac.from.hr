@@ -57,6 +57,7 @@ def invalidate():
     if user_invalidation_token == invalidation_token:
         cache.projects = []
         cache.experiences = []
+        cache.home_page = ""
         message = "Content is successfully invalidated"
     else:
         message = "Missing token header, content isn't invalidated"
