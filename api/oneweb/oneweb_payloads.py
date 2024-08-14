@@ -18,7 +18,7 @@ class Payload:
               width
               height
             }
-            experiencesCollection(limit: 8) {
+            experiencesCollection(limit: 8, order: sys_firstPublishedAt_DESC) {
               items {
                 title
                 description
@@ -26,7 +26,7 @@ class Payload:
                 until
               }
             }
-            projectsCollection(limit: 8) {
+            projectsCollection(limit: 8, order: sys_firstPublishedAt_DESC) {
               items {
                 title
                 description
@@ -41,7 +41,7 @@ class Payload:
     def get_projects_payload():
         return """
         {
-            projectArticleCollection(limit: 8) {
+            projectArticleCollection(limit: 8, order: sys_firstPublishedAt_DESC) {
                 items {
                     title
                     description
@@ -55,7 +55,7 @@ class Payload:
     def get_experiences_payload():
         return """
         {
-            experienceArticleCollection(limit: 8) {
+            experienceArticleCollection(limit: 8, order: sys_firstPublishedAt_DESC) {
                 items {
                     title
                     description
