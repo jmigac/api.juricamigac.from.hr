@@ -37,8 +37,6 @@ class Payload:
               items {
                 title
                 description
-                fromPeriod
-                untilPeriod
                 technologies
               }
             }
