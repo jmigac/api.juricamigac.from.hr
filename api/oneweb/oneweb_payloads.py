@@ -1,15 +1,15 @@
 class Payload:
 
-    def __init__(self):
-        self.EXPERIENCES_PAYLOAD = Payload.get_experiences_payload()
-        self.PROJECTS_PAYLOAD = Payload.get_projects_payload()
-        self.HOME_PAGE_PAYLOAD = Payload.get_homepage_payload()
+    def __init__(self, response_limit, homepage_id):
+        self.EXPERIENCES_PAYLOAD = Payload.get_experiences_payload(response_limit)
+        self.PROJECTS_PAYLOAD = Payload.get_projects_payload(response_limit)
+        self.HOME_PAGE_PAYLOAD = Payload.get_homepage_payload(response_limit, homepage_id)
 
     @staticmethod
-    def get_homepage_payload():
-        return """
+    def get_homepage_payload(response_limit, homepage_id):
+        homepage = """
         {
-          homePage(id: "3rqB44b52XLXHtmKiSPgqC") {
+          homePage(id: "%s") {
             title
             teaser {
               title
@@ -18,7 +18,7 @@ class Payload:
               width
               height
             }
-            experiencesCollection(limit: 8, order: sys_firstPublishedAt_DESC) {
+            experiencesCollection(limit: %s, order: sys_firstPublishedAt_DESC) {
               items {
                 title
                 description
@@ -26,22 +26,32 @@ class Payload:
                 until
               }
             }
-            projectsCollection(limit: 8, order: sys_firstPublishedAt_DESC) {
+            projectsCollection(limit: %s, order: sys_firstPublishedAt_DESC) {
               items {
                 title
                 description
                 technologies
               }
             }
+            expertisesCollection(limit: %s, order: sys_firstPublishedAt_DESC) {
+              items {
+                title
+                description
+                fromPeriod
+                untilPeriod
+                technologies
+              }
+            }
           }
         }
         """
+        return homepage % (homepage_id, response_limit, response_limit, response_limit)
 
     @staticmethod
-    def get_projects_payload():
-        return """
+    def get_projects_payload(response_limit):
+        projects = """
         {
-            projectArticleCollection(limit: 8, order: sys_firstPublishedAt_DESC) {
+            projectArticleCollection(limit: %s, order: sys_firstPublishedAt_DESC) {
                 items {
                     title
                     description
@@ -50,12 +60,13 @@ class Payload:
             }
         }
         """
+        return projects % response_limit
 
     @staticmethod
-    def get_experiences_payload():
-        return """
+    def get_experiences_payload(response_limit):
+        experiences = """
         {
-            experienceArticleCollection(limit: 8, order: sys_firstPublishedAt_DESC) {
+            experienceArticleCollection(limit: %s, order: sys_firstPublishedAt_DESC) {
                 items {
                     title
                     description
@@ -65,3 +76,4 @@ class Payload:
             }
         }
         """
+        return experiences % response_limit
