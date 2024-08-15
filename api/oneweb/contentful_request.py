@@ -1,18 +1,19 @@
 import requests
 
-from api.oneweb.oneweb_payloads import Payload
 from api.oneweb.oneweb_constants import (GRAPHQL_QUERY, GRAPHQL_VARIABLES, HOME_PAGE, PROJECT_COLLECTION,
                                          EXPERIENCE_COLLECTION, APPLICATION_JSON, BEARER, GRAPHQL_DATA, GRAPHQL_ITEMS)
+from api.oneweb.oneweb_payloads import Payload
 
 
 class ContentfulRequest:
 
-    def __init__(self, space_id, environment, token):
+    def __init__(self, space_id, environment, token, response_limit, homepage_id):
         self.space_id = space_id
         self.environment = environment
         self.token = token
         self.base_url = f"https://graphql.contentful.com/content/v1/spaces/{self.space_id}/environments/{self.environment}"
-        self.payloads = Payload()
+        self.payloads = Payload(response_limit=response_limit,
+                                homepage_id=homepage_id)
 
     def get_homepage(self):
         headers = self.get_headers()
