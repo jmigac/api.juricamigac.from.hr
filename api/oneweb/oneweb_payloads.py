@@ -40,13 +40,15 @@ class Payload:
                 technologies
               }
             }
-            socialMediaLinks {
-              showLinkedIn
-              linkedInUrl
-              showGithub
-              githubUrl
-              showDevTo
-              devToUrl
+            footer {
+              socialMediaLinks {
+                showLinkedIn
+                linkedInUrl
+                showGithub
+                githubUrl
+                showDevTo
+                devToUrl 
+              }
             }
           }
         }
