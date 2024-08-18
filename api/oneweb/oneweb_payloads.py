@@ -40,6 +40,16 @@ class Payload:
                 technologies
               }
             }
+            footer {
+              socialMediaLinks {
+                showLinkedIn
+                linkedInUrl
+                showGithub
+                githubUrl
+                showDevTo
+                devToUrl 
+              }
+            }
           }
         }
         """
