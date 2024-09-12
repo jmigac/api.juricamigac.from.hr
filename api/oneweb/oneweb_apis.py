@@ -53,8 +53,8 @@ def get_home_page():
         home_page_result = cache.home_page
     return Response(json.dumps(home_page_result, indent=4),
                     headers={'Access-Control-Allow-Origin': '*',
-                             'Cache-Control': 'max-age=600, stale-while-revalidate=86400',
-                             'CDN-Cache-Control': 'max-age=600, stale-while-revalidate=86400',
+                             'Cache-Control': 'max-age=3600, stale-while-revalidate=86400',
+                             'CDN-Cache-Control': 'max-age=3600, stale-while-revalidate=86400',
                              'Vercel-CDN-Cache-Control': 'max-age=3600, stale-while-revalidate=86400'},
                     mimetype=APPLICATION_JSON)
 
