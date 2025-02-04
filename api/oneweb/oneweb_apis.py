@@ -14,7 +14,7 @@ oneweb_api = Blueprint("oneweb_api", __name__, template_folder="oneweb")
 environment = os.environ[ENVIRONMENT]
 space_id = os.environ[SPACE_ID]
 token = os.environ[APP_TOKEN]
-cache_duration = os.environ[CACHE_DURATION]
+cache_duration = int(os.environ[CACHE_DURATION])
 flaskCache = cache_from_flask.FlaskCache.get_cache()
 invalidation_token = os.environ[INVALIDATION_TOKEN]
 response_limit = os.environ[RESPONSE_LIMIT]
