@@ -18,6 +18,10 @@ class Payload:
               width
               height
             }
+            aboutMe {
+                title
+                description
+            }
             experiencesCollection(limit: %s, order: sys_firstPublishedAt_DESC) {
               items {
                 title
