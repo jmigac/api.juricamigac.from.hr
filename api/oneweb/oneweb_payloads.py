@@ -48,10 +48,13 @@ class Payload:
               socialMediaLinks {
                 showLinkedIn
                 linkedInUrl
+                linkedInAriaLabel
                 showGithub
                 githubUrl
+                githubAriaLabel
                 showDevTo
                 devToUrl 
+                devToAriaLabel
               }
             }
           }
