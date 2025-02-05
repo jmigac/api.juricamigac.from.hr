@@ -36,6 +36,84 @@ def get_home_page():
                              'CDN-Cache-Control': 'max-age=3600, stale-while-revalidate=86400',
                              'Vercel-CDN-Cache-Control': 'max-age=3600, stale-while-revalidate=86400'},
                     mimetype=APPLICATION_JSON)
+    return CachedResponse(response = response, timeout=cache_duration)
+
+
+@oneweb_api.route('/v1/oneweb/projects')
+@flaskCache.cached(timeout=cache_duration)
+def get_projects():
+    projects = contentful.get_projects()
+    response = Response(json.dumps(projects, indent=4),
+                    headers={'Access-Control-Allow-Origin': '*',
+                             'Cache-Control': 'max-age=3600, stale-while-revalidate=86400',
+                             'CDN-Cache-Control': 'max-age=3600, stale-while-revalidate=86400',
+                             'Vercel-CDN-Cache-Control': 'max-age=3600, stale-while-revalidate=86400'},
+                    mimetype=APPLICATION_JSON)
+    return CachedResponse(response=response, timeout=cache_duration)
+
+
+@oneweb_api.route('/v1/oneweb/experiences')
+@flaskCache.cached(timeout=cache_duration)
+def get_experiences():
+    experiences = contentful.get_experiences()
+    response = Response(json.dumps(experiences, indent=4),
+                    headers={'Access-Control-Allow-Origin': '*',
+                             'Cache-Control': 'max-age=3600, stale-while-revalidate=86400',
+                             'CDN-Cache-Control': 'max-age=3600, stale-while-revalidate=86400',
+                             'Vercel-CDN-Cache-Control': 'max-age=3600, stale-while-revalidate=86400'},
+                    mimetype=APPLICATION_JSON)
+    return CachedResponse(response=response, timeout=cache_duration)
+
+
+@oneweb_api.route('/v1/oneweb/expertises')
+@flaskCache.cached(timeout=cache_duration)
+def get_expertises():
+    expertises = contentful.get_expertises()
+    response = Response(json.dumps(expertises, indent=4),
+                    headers={'Access-Control-Allow-Origin': '*',
+                             'Cache-Control': 'max-age=3600, stale-while-revalidate=86400',
+                             'CDN-Cache-Control': 'max-age=3600, stale-while-revalidate=86400',
+                             'Vercel-CDN-Cache-Control': 'max-age=3600, stale-while-revalidate=86400'},
+                    mimetype=APPLICATION_JSON)
+    return CachedResponse(response=response, timeout=cache_duration)
+
+
+@oneweb_api.route('/v1/oneweb/footer')
+@flaskCache.cached(timeout=cache_duration)
+def get_footer():
+    footer = contentful.get_footer()
+    response = Response(json.dumps(footer, indent=4),
+                    headers={'Access-Control-Allow-Origin': '*',
+                             'Cache-Control': 'max-age=3600, stale-while-revalidate=86400',
+                             'CDN-Cache-Control': 'max-age=3600, stale-while-revalidate=86400',
+                             'Vercel-CDN-Cache-Control': 'max-age=3600, stale-while-revalidate=86400'},
+                    mimetype=APPLICATION_JSON)
+    return CachedResponse(response=response, timeout=cache_duration)
+
+
+@oneweb_api.route('/v1/oneweb/aboutMe')
+@flaskCache.cached(timeout=cache_duration)
+def get_about_me():
+    about_me = contentful.get_about_me()
+    response = Response(json.dumps(about_me, indent=4),
+                    headers={'Access-Control-Allow-Origin': '*',
+                             'Cache-Control': 'max-age=3600, stale-while-revalidate=86400',
+                             'CDN-Cache-Control': 'max-age=3600, stale-while-revalidate=86400',
+                             'Vercel-CDN-Cache-Control': 'max-age=3600, stale-while-revalidate=86400'},
+                    mimetype=APPLICATION_JSON)
+    return CachedResponse(response=response, timeout=cache_duration)
+
+
+@oneweb_api.route('/v1/oneweb/teaser')
+@flaskCache.cached(timeout=cache_duration)
+def get_teaser():
+    teaser = contentful.get_teaser()
+    response = Response(json.dumps(teaser, indent=4),
+                    headers={'Access-Control-Allow-Origin': '*',
+                             'Cache-Control': 'max-age=3600, stale-while-revalidate=86400',
+                             'CDN-Cache-Control': 'max-age=3600, stale-while-revalidate=86400',
+                             'Vercel-CDN-Cache-Control': 'max-age=3600, stale-while-revalidate=86400'},
+                    mimetype=APPLICATION_JSON)
     return CachedResponse(response=response, timeout=cache_duration)
 
 

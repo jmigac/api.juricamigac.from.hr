@@ -1,7 +1,8 @@
 import requests
 
 from api.oneweb.oneweb_constants import (GRAPHQL_QUERY, GRAPHQL_VARIABLES, HOME_PAGE, PROJECT_COLLECTION,
-                                         EXPERIENCE_COLLECTION, APPLICATION_JSON, BEARER, GRAPHQL_DATA, GRAPHQL_ITEMS)
+                                         EXPERIENCE_COLLECTION, APPLICATION_JSON, BEARER, GRAPHQL_DATA, GRAPHQL_ITEMS,
+                                         EXPERTISES_COLLECTION)
 from api.oneweb.oneweb_payloads import Payload
 
 
@@ -38,6 +39,38 @@ class ContentfulRequest:
                                  headers=headers)
         return ContentfulRequest.get_response_content(response=response,
                                                       field_name=EXPERIENCE_COLLECTION)
+
+    def get_expertises(self):
+        headers = self.get_headers()
+        response = requests.post(self.base_url,
+                                 json={GRAPHQL_QUERY: self.payloads.EXPERTISES_PAYLOAD, GRAPHQL_VARIABLES: {}},
+                                 headers=headers)
+        return ContentfulRequest.get_response_content(response=response,
+                                                      field_name=EXPERTISES_COLLECTION)
+
+    def get_footer(self):
+        headers = self.get_headers()
+        response = requests.post(self.base_url,
+                                 json={GRAPHQL_QUERY: self.payloads.FOOTER_PAYLOAD, GRAPHQL_VARIABLES: {}},
+                                 headers=headers)
+        return ContentfulRequest.get_response_single_content(response=response,
+                                                             field_name=HOME_PAGE)
+
+    def get_about_me(self):
+        headers = self.get_headers()
+        response = requests.post(self.base_url,
+                                 json={GRAPHQL_QUERY: self.payloads.ABOUT_ME_PAYLOAD, GRAPHQL_VARIABLES: {}},
+                                 headers=headers)
+        return ContentfulRequest.get_response_single_content(response=response,
+                                                             field_name=HOME_PAGE)
+
+    def get_teaser(self):
+        headers = self.get_headers()
+        response = requests.post(self.base_url,
+                                 json={GRAPHQL_QUERY: self.payloads.TEASER_PAYLOAD, GRAPHQL_VARIABLES: {}},
+                                 headers=headers)
+        return ContentfulRequest.get_response_single_content(response=response,
+                                                             field_name=HOME_PAGE)
 
     def get_headers(self):
         return {
