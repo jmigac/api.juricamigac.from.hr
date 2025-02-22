@@ -1,19 +1,19 @@
 class Payload:
 
-    def __init__(self, response_limit, homepage_id):
+    def __init__(self, response_limit, homepage_id, locale):
         self.EXPERIENCES_PAYLOAD = Payload.get_experiences_payload(response_limit)
         self.PROJECTS_PAYLOAD = Payload.get_projects_payload(response_limit)
-        self.HOME_PAGE_PAYLOAD = Payload.get_homepage_payload(response_limit, homepage_id)
+        self.HOME_PAGE_PAYLOAD = Payload.get_homepage_payload(response_limit, homepage_id, locale)
         self.FOOTER_PAYLOAD = Payload.get_footer_payload(homepage_id)
         self.EXPERTISES_PAYLOAD = Payload.get_expertises_payload(response_limit)
         self.ABOUT_ME_PAYLOAD = Payload.get_about_me_payload(homepage_id)
         self.TEASER_PAYLOAD = Payload.get_teaser_payload(homepage_id)
 
     @staticmethod
-    def get_homepage_payload(response_limit, homepage_id):
+    def get_homepage_payload(response_limit, homepage_id, locale):
         homepage = """
         {
-          homePage(id: "%s") {
+          homePage(id: "%s", locale: "%s") {
             title
             teaser {
               title
@@ -74,7 +74,7 @@ class Payload:
           }
         }
         """
-        return homepage % (homepage_id, response_limit, response_limit, response_limit)
+        return homepage % (homepage_id, locale, response_limit, response_limit, response_limit)
 
     @staticmethod
     def get_projects_payload(response_limit):

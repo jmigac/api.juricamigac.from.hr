@@ -8,18 +8,24 @@ from api.oneweb.oneweb_payloads import Payload
 
 class ContentfulRequest:
 
-    def __init__(self, space_id, environment, token, response_limit, homepage_id):
+    def __init__(self, space_id, environment, token, response_limit, homepage_id, locale):
         self.space_id = space_id
         self.environment = environment
+        self.response_limit = response_limit
+        self.homepage_id = homepage_id
         self.token = token
         self.base_url = f"https://graphql.contentful.com/content/v1/spaces/{self.space_id}/environments/{self.environment}"
         self.payloads = Payload(response_limit=response_limit,
-                                homepage_id=homepage_id)
+                                homepage_id=homepage_id,
+                                locale=locale)
 
-    def get_homepage(self):
+    def get_homepage(self, locale):
         headers = self.get_headers()
+        home_page_payload = Payload.get_homepage_payload(response_limit=self.response_limit,
+                                                         homepage_id=self.homepage_id,
+                                                         locale=locale)
         response = requests.post(self.base_url,
-                                 json={GRAPHQL_QUERY: self.payloads.HOME_PAGE_PAYLOAD, GRAPHQL_VARIABLES: {}},
+                                 json={GRAPHQL_QUERY: home_page_payload, GRAPHQL_VARIABLES: {}},
                                  headers=headers)
         return ContentfulRequest.get_response_single_content(response=response,
                                                              field_name=HOME_PAGE)

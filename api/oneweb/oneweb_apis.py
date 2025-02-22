@@ -23,13 +23,22 @@ contentful = ContentfulRequest(space_id=space_id,
                                environment=environment,
                                token=token,
                                response_limit=response_limit,
-                               homepage_id=homepage_id)
+                               homepage_id=homepage_id,
+                               locale="en-US")
+
+
+def make_cache_key():
+    derivative_name = "homepage"
+    locale = get_locale()
+    derivative_name = derivative_name + "_locale-" + locale
+    return derivative_name
 
 
 @oneweb_api.route('/v1/oneweb/homePage')
-@flaskCache.cached(timeout=cache_duration)
+@flaskCache.cached(timeout=cache_duration, make_cache_key=make_cache_key)
 def get_home_page():
-    home_page = contentful.get_homepage()
+    locale = get_locale()
+    home_page = contentful.get_homepage(locale=locale)
     response = Response(json.dumps(home_page, indent=4),
                     headers={'Access-Control-Allow-Origin': '*',
                              'Cache-Control': 'max-age=3600, stale-while-revalidate=86400',
@@ -130,3 +139,7 @@ def invalidate():
                     headers=ACCESS_CONTROL_ALLOW_ORIGIN,
                     mimetype=APPLICATION_JSON)
 
+
+def get_locale():
+    locale_param = request.args.get('locale')
+    return locale_param if locale_param else 'en-US'
