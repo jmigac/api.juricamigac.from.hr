@@ -26,6 +26,9 @@ class Payload:
                 title
                 description
             }
+            experiencesTitle {
+                title
+            }
             experiencesCollection(limit: %s, order: sys_firstPublishedAt_DESC) {
               items {
                 title
@@ -34,12 +37,18 @@ class Payload:
                 until
               }
             }
+            projectsTitle {
+                title
+            }
             projectsCollection(limit: %s, order: sys_firstPublishedAt_DESC) {
               items {
                 title
                 description
                 technologies
               }
+            }
+            expertiseTitle {
+                title
             }
             expertisesCollection(limit: %s, order: sys_firstPublishedAt_DESC) {
               items {
