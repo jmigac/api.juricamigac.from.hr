@@ -34,6 +34,19 @@ def make_cache_key():
     return derivative_name
 
 
+@oneweb_api.route('/v1/oneweb/homePage/robots.txt')
+@flaskCache.cached(timeout=cache_duration, make_cache_key="robots.txt")
+def get_robots_txt():
+    home_page = contentful.get_robots_txt()
+    response = Response(json.dumps(home_page, indent=4),
+                    headers={'Access-Control-Allow-Origin': '*',
+                             'Cache-Control': 'max-age=3600, stale-while-revalidate=86400',
+                             'CDN-Cache-Control': 'max-age=3600, stale-while-revalidate=86400',
+                             'Vercel-CDN-Cache-Control': 'max-age=3600, stale-while-revalidate=86400'},
+                    mimetype=APPLICATION_JSON)
+    return CachedResponse(response=response, timeout=cache_duration)
+
+
 @oneweb_api.route('/v1/oneweb/homePage')
 @flaskCache.cached(timeout=cache_duration, make_cache_key=make_cache_key)
 def get_home_page():

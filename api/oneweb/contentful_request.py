@@ -78,6 +78,14 @@ class ContentfulRequest:
         return ContentfulRequest.get_response_single_content(response=response,
                                                              field_name=HOME_PAGE)
 
+    def get_robots_txt(self):
+        headers = self.get_headers()
+        response = requests.post(url=self.base_url,
+                                 json={GRAPHQL_QUERY: self.payloads.ROBOTS_TXT_PAYLOAD, GRAPHQL_VARIABLES: {}},
+                                 headers=headers)
+        return ContentfulRequest.get_response_single_content(response=response, field_name=HOME_PAGE)
+
+
     def get_headers(self):
         return {
             'Content-Type': APPLICATION_JSON,

@@ -8,6 +8,7 @@ class Payload:
         self.EXPERTISES_PAYLOAD = Payload.get_expertises_payload(response_limit)
         self.ABOUT_ME_PAYLOAD = Payload.get_about_me_payload(homepage_id)
         self.TEASER_PAYLOAD = Payload.get_teaser_payload(homepage_id)
+        self.ROBOTS_TXT_PAYLOAD = Payload.get_robots_txt_payload(homepage_id)
 
     @staticmethod
     def get_homepage_payload(response_limit, homepage_id, locale):
@@ -184,3 +185,18 @@ class Payload:
         }
         """
         return footer % home_page_id
+
+    @staticmethod
+    def get_robots_txt_payload(homepage_id):
+        robots_txt = """
+        {
+          homePage(id:"%s") {
+            seo {
+              robotsTxt {
+                value
+              }
+            }
+          }
+        }
+        """
+        return robots_txt % homepage_id
