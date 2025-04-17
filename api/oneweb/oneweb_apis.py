@@ -62,7 +62,7 @@ def get_home_page():
 
 
 @oneweb_api.route('/v1/oneweb/projects')
-@flaskCache.cached(timeout=cache_duration)
+@flaskCache.cached(timeout=cache_duration, make_cache_key="projects")
 def get_projects():
     projects = contentful.get_projects()
     response = Response(json.dumps(projects, indent=4),
@@ -75,7 +75,7 @@ def get_projects():
 
 
 @oneweb_api.route('/v1/oneweb/experiences')
-@flaskCache.cached(timeout=cache_duration)
+@flaskCache.cached(timeout=cache_duration, make_cache_key="experiences")
 def get_experiences():
     experiences = contentful.get_experiences()
     response = Response(json.dumps(experiences, indent=4),
@@ -88,7 +88,7 @@ def get_experiences():
 
 
 @oneweb_api.route('/v1/oneweb/expertises')
-@flaskCache.cached(timeout=cache_duration)
+@flaskCache.cached(timeout=cache_duration, make_cache_key="expertises")
 def get_expertises():
     expertises = contentful.get_expertises()
     response = Response(json.dumps(expertises, indent=4),
@@ -101,7 +101,7 @@ def get_expertises():
 
 
 @oneweb_api.route('/v1/oneweb/footer')
-@flaskCache.cached(timeout=cache_duration)
+@flaskCache.cached(timeout=cache_duration, make_cache_key="footer")
 def get_footer():
     footer = contentful.get_footer()
     response = Response(json.dumps(footer, indent=4),
@@ -114,7 +114,7 @@ def get_footer():
 
 
 @oneweb_api.route('/v1/oneweb/aboutMe')
-@flaskCache.cached(timeout=cache_duration)
+@flaskCache.cached(timeout=cache_duration, make_cache_key="aboutMe")
 def get_about_me():
     about_me = contentful.get_about_me()
     response = Response(json.dumps(about_me, indent=4),
@@ -127,7 +127,7 @@ def get_about_me():
 
 
 @oneweb_api.route('/v1/oneweb/teaser')
-@flaskCache.cached(timeout=cache_duration)
+@flaskCache.cached(timeout=cache_duration, make_cache_key="teaser")
 def get_teaser():
     teaser = contentful.get_teaser()
     response = Response(json.dumps(teaser, indent=4),
@@ -144,7 +144,7 @@ def invalidate():
     message = ""
     user_invalidation_token = request.args.get(QUERY_TOKEN)
     if user_invalidation_token == invalidation_token:
-        flaskCache.cache.clear()
+        cache_from_flask.FlaskCache.clear_cache()
         message = "Content is successfully invalidated"
     else:
         message = "Missing token header, content isn't invalidated"
