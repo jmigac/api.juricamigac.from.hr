@@ -15,5 +15,4 @@ class FlaskCache:
 
     @staticmethod
     def clear_cache():
-        if FlaskCache.cache_from_flask is not None and FlaskCache.cache_from_flask:
-            FlaskCache.cache_from_flask.clear()
+        FlaskCache.cache_from_flask = Cache()
