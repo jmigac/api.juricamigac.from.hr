@@ -144,7 +144,6 @@ def invalidate():
     message = ""
     user_invalidation_token = request.args.get(QUERY_TOKEN)
     if user_invalidation_token == invalidation_token:
-        cache_from_flask.FlaskCache.clear_cache()
         flaskCache.clear()
         message = "Content is successfully invalidated"
     else:
