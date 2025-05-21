@@ -8,7 +8,8 @@ from flask_caching import CachedResponse
 from api.oneweb.contentful_request import ContentfulRequest
 from api.oneweb.oneweb_constants import (APPLICATION_JSON,
                                          ENVIRONMENT, SPACE_ID, APP_TOKEN, CACHE_DURATION, INVALIDATION_TOKEN,
-                                         ACCESS_CONTROL_ALLOW_ORIGIN, QUERY_TOKEN, RESPONSE_LIMIT, HOMEPAGE_ID)
+                                         ACCESS_CONTROL_ALLOW_ORIGIN, QUERY_TOKEN, RESPONSE_LIMIT, HOMEPAGE_ID,
+                                         CACHE_CONTROL_HEADER, CACHE_CONTROL_STALE_WHILE_REVALIDATE_HEADER)
 
 oneweb_api = Blueprint("oneweb_api", __name__, template_folder="oneweb")
 environment = os.environ[ENVIRONMENT]
@@ -25,6 +26,8 @@ contentful = ContentfulRequest(space_id=space_id,
                                response_limit=response_limit,
                                homepage_id=homepage_id,
                                locale="en-US")
+cache_control_header_value = os.environ[CACHE_CONTROL_HEADER]
+stale_while_revalidate_header_value = os.environ[CACHE_CONTROL_STALE_WHILE_REVALIDATE_HEADER]
 
 
 def make_cache_key():
@@ -54,9 +57,9 @@ def get_home_page():
     home_page = contentful.get_homepage(locale=locale)
     response = Response(json.dumps(home_page, indent=4),
                     headers={'Access-Control-Allow-Origin': '*',
-                             'Cache-Control': 'max-age=3600, stale-while-revalidate=86400',
-                             'CDN-Cache-Control': 'max-age=3600, stale-while-revalidate=86400',
-                             'Vercel-CDN-Cache-Control': 'max-age=3600, stale-while-revalidate=86400'},
+                             'Cache-Control': f'max-age={cache_control_header_value}, stale-while-revalidate={stale_while_revalidate_header_value}',
+                             'CDN-Cache-Control': f'max-age={cache_control_header_value}, stale-while-revalidate={stale_while_revalidate_header_value}',
+                             'Vercel-CDN-Cache-Control': f'max-age={cache_control_header_value}, stale-while-revalidate={stale_while_revalidate_header_value}'},
                     mimetype=APPLICATION_JSON)
     return CachedResponse(response = response, timeout=cache_duration)
 
@@ -66,11 +69,11 @@ def get_home_page():
 def get_projects():
     projects = contentful.get_projects()
     response = Response(json.dumps(projects, indent=4),
-                    headers={'Access-Control-Allow-Origin': '*',
-                             'Cache-Control': 'max-age=3600, stale-while-revalidate=86400',
-                             'CDN-Cache-Control': 'max-age=3600, stale-while-revalidate=86400',
-                             'Vercel-CDN-Cache-Control': 'max-age=3600, stale-while-revalidate=86400'},
-                    mimetype=APPLICATION_JSON)
+                        headers={'Access-Control-Allow-Origin': '*',
+                                 'Cache-Control': f'max-age={cache_control_header_value}, stale-while-revalidate={stale_while_revalidate_header_value}',
+                                 'CDN-Cache-Control': f'max-age={cache_control_header_value}, stale-while-revalidate={stale_while_revalidate_header_value}',
+                                 'Vercel-CDN-Cache-Control': f'max-age={cache_control_header_value}, stale-while-revalidate={stale_while_revalidate_header_value}'},
+                        mimetype=APPLICATION_JSON)
     return CachedResponse(response=response, timeout=cache_duration)
 
 
@@ -79,11 +82,11 @@ def get_projects():
 def get_experiences():
     experiences = contentful.get_experiences()
     response = Response(json.dumps(experiences, indent=4),
-                    headers={'Access-Control-Allow-Origin': '*',
-                             'Cache-Control': 'max-age=3600, stale-while-revalidate=86400',
-                             'CDN-Cache-Control': 'max-age=3600, stale-while-revalidate=86400',
-                             'Vercel-CDN-Cache-Control': 'max-age=3600, stale-while-revalidate=86400'},
-                    mimetype=APPLICATION_JSON)
+                        headers={'Access-Control-Allow-Origin': '*',
+                                 'Cache-Control': f'max-age={cache_control_header_value}, stale-while-revalidate={stale_while_revalidate_header_value}',
+                                 'CDN-Cache-Control': f'max-age={cache_control_header_value}, stale-while-revalidate={stale_while_revalidate_header_value}',
+                                 'Vercel-CDN-Cache-Control': f'max-age={cache_control_header_value}, stale-while-revalidate={stale_while_revalidate_header_value}'},
+                        mimetype=APPLICATION_JSON)
     return CachedResponse(response=response, timeout=cache_duration)
 
 
@@ -92,11 +95,11 @@ def get_experiences():
 def get_expertises():
     expertises = contentful.get_expertises()
     response = Response(json.dumps(expertises, indent=4),
-                    headers={'Access-Control-Allow-Origin': '*',
-                             'Cache-Control': 'max-age=3600, stale-while-revalidate=86400',
-                             'CDN-Cache-Control': 'max-age=3600, stale-while-revalidate=86400',
-                             'Vercel-CDN-Cache-Control': 'max-age=3600, stale-while-revalidate=86400'},
-                    mimetype=APPLICATION_JSON)
+                        headers={'Access-Control-Allow-Origin': '*',
+                                 'Cache-Control': f'max-age={cache_control_header_value}, stale-while-revalidate={stale_while_revalidate_header_value}',
+                                 'CDN-Cache-Control': f'max-age={cache_control_header_value}, stale-while-revalidate={stale_while_revalidate_header_value}',
+                                 'Vercel-CDN-Cache-Control': f'max-age={cache_control_header_value}, stale-while-revalidate={stale_while_revalidate_header_value}'},
+                        mimetype=APPLICATION_JSON)
     return CachedResponse(response=response, timeout=cache_duration)
 
 
@@ -105,11 +108,11 @@ def get_expertises():
 def get_footer():
     footer = contentful.get_footer()
     response = Response(json.dumps(footer, indent=4),
-                    headers={'Access-Control-Allow-Origin': '*',
-                             'Cache-Control': 'max-age=3600, stale-while-revalidate=86400',
-                             'CDN-Cache-Control': 'max-age=3600, stale-while-revalidate=86400',
-                             'Vercel-CDN-Cache-Control': 'max-age=3600, stale-while-revalidate=86400'},
-                    mimetype=APPLICATION_JSON)
+                        headers={'Access-Control-Allow-Origin': '*',
+                                 'Cache-Control': f'max-age={cache_control_header_value}, stale-while-revalidate={stale_while_revalidate_header_value}',
+                                 'CDN-Cache-Control': f'max-age={cache_control_header_value}, stale-while-revalidate={stale_while_revalidate_header_value}',
+                                 'Vercel-CDN-Cache-Control': f'max-age={cache_control_header_value}, stale-while-revalidate={stale_while_revalidate_header_value}'},
+                        mimetype=APPLICATION_JSON)
     return CachedResponse(response=response, timeout=cache_duration)
 
 
@@ -118,11 +121,11 @@ def get_footer():
 def get_about_me():
     about_me = contentful.get_about_me()
     response = Response(json.dumps(about_me, indent=4),
-                    headers={'Access-Control-Allow-Origin': '*',
-                             'Cache-Control': 'max-age=3600, stale-while-revalidate=86400',
-                             'CDN-Cache-Control': 'max-age=3600, stale-while-revalidate=86400',
-                             'Vercel-CDN-Cache-Control': 'max-age=3600, stale-while-revalidate=86400'},
-                    mimetype=APPLICATION_JSON)
+                        headers={'Access-Control-Allow-Origin': '*',
+                                 'Cache-Control': f'max-age={cache_control_header_value}, stale-while-revalidate={stale_while_revalidate_header_value}',
+                                 'CDN-Cache-Control': f'max-age={cache_control_header_value}, stale-while-revalidate={stale_while_revalidate_header_value}',
+                                 'Vercel-CDN-Cache-Control': f'max-age={cache_control_header_value}, stale-while-revalidate={stale_while_revalidate_header_value}'},
+                        mimetype=APPLICATION_JSON)
     return CachedResponse(response=response, timeout=cache_duration)
 
 
@@ -131,11 +134,11 @@ def get_about_me():
 def get_teaser():
     teaser = contentful.get_teaser()
     response = Response(json.dumps(teaser, indent=4),
-                    headers={'Access-Control-Allow-Origin': '*',
-                             'Cache-Control': 'max-age=3600, stale-while-revalidate=86400',
-                             'CDN-Cache-Control': 'max-age=3600, stale-while-revalidate=86400',
-                             'Vercel-CDN-Cache-Control': 'max-age=3600, stale-while-revalidate=86400'},
-                    mimetype=APPLICATION_JSON)
+                        headers={'Access-Control-Allow-Origin': '*',
+                                 'Cache-Control': f'max-age={cache_control_header_value}, stale-while-revalidate={stale_while_revalidate_header_value}',
+                                 'CDN-Cache-Control': f'max-age={cache_control_header_value}, stale-while-revalidate={stale_while_revalidate_header_value}',
+                                 'Vercel-CDN-Cache-Control': f'max-age={cache_control_header_value}, stale-while-revalidate={stale_while_revalidate_header_value}'},
+                        mimetype=APPLICATION_JSON)
     return CachedResponse(response=response, timeout=cache_duration)
 
 
